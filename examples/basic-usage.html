@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ellipsis-id Basic Usage Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e9f7ef;
+      border-radius: 5px;
+    }
+
+    .component {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+    }
+
+    .component h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>ellipsis-id Fingerprinting Demo</h1>
+
+  <p>This example demonstrates how to use the ellipsis-id library to generate browser fingerprints.</p>
+
+  <div>
+    <button id="generateBasic">Generate Basic Fingerprint</button>
+    <button id="generateDetailed">Generate Detailed Fingerprint</button>
+    <button id="generateCustom">Generate Custom Fingerprint</button>
+  </div>
+
+  <div class="result" id="result">
+    <p>Click one of the buttons above to generate a fingerprint.</p>
+  </div>
+
+  <h2>Implementation</h2>
+
+  <pre>
+// Basic usage
+import { generateFingerprint } from 'ellipsis-id';
+
+const fingerprint = await generateFingerprint();
+console.log('Browser fingerprint:', fingerprint);
+
+// Detailed usage
+import { generateDetailedFingerprint } from 'ellipsis-id';
+
+const detailedResult = await generateDetailedFingerprint();
+console.log('Detailed fingerprint:', detailedResult);
+
+// Custom configuration
+import { generateFingerprint } from 'ellipsis-id';
+
+const customFingerprint = await generateFingerprint({
+  methods: ['basic', 'canvas', 'webgl'],
+  hashAlgorithm: 'sha-256',
+  includePublicIp: false,
+  timeout: 3000
+});
+  </pre>
+
+  <!-- Load the ellipsis-id library from a CDN (in a real app, you would use npm/webpack) -->
+  <!-- Move the script loading to the end of body -->
+  <script>
+    // Add debug logging
+    console.log('Attempting to load ellipsis-id...');
+  </script>
+  <script src="../dist/ellipsis-id.umd.js" onload="console.log('ellipsis-id script loaded')"
+    onerror="console.error('Failed to load ellipsis-id script')"></script>
+
+  <script>
+    // Reference to the result div
+    const resultDiv = document.getElementById('result');
+
+    // Check if library is loaded immediately
+    console.log('Current BrowserShield status:', window.BrowserShield);
+
+    // Wait for the library to be loaded and initialized
+    window.onload = () => {
+      console.log('Window loaded, BrowserShield status:', window.BrowserShield);
+      if (typeof window.BrowserShield === 'undefined') {
+        console.error('ellipsis-id library not loaded properly');
+        resultDiv.innerHTML = '<p>Error: ellipsis-id library not loaded properly</p>';
+        return;
+      }
+
+      // Generate basic fingerprint
+      document.getElementById('generateBasic').addEventListener('click', async () => {
+        resultDiv.innerHTML = '<p>Generating fingerprint...</p>';
+
+        try {
+          const fingerprint = await window.BrowserShield.generateFingerprint();
+
+          resultDiv.innerHTML = `
+              <h3>Basic Fingerprint</h3>
+              <p><strong>Hash:</strong> ${fingerprint}</p>
+            `;
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      });
+
+      // Generate detailed fingerprint
+      document.getElementById('generateDetailed').addEventListener('click', async () => {
+        resultDiv.innerHTML = '<p>Generating detailed fingerprint...</p>';
+
+        try {
+          const result = await BrowserShield.generateDetailedFingerprint();
+
+          let componentsHtml = '';
+          for (const [key, value] of Object.entries(result.components)) {
+            componentsHtml += `
+                <div class="component">
+                  <h3>${key}</h3>
+                  <p><strong>Hash:</strong> ${value.hash}</p>
+                </div>
+              `;
+          }
+
+          resultDiv.innerHTML = `
+              <h3>Detailed Fingerprint</h3>
+              <p><strong>Combined Hash:</strong> ${result.hash}</p>
+              <p><strong>Created:</strong> ${new Date(result.createdAt).toLocaleString()}</p>
+              <h4>Components:</h4>
+              ${componentsHtml}
+            `;
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      });
+
+      // Generate custom fingerprint
+      document.getElementById('generateCustom').addEventListener('click', async () => {
+        resultDiv.innerHTML = '<p>Generating custom fingerprint...</p>';
+
+        try {
+          const fingerprint = await BrowserShield.generateFingerprint({
+            methods: ['basic', 'canvas', 'webgl'],
+            hashAlgorithm: 'sha-256',
+            includePublicIp: false,
+            timeout: 3000
+          });
+
+          resultDiv.innerHTML = `
+              <h3>Custom Fingerprint</h3>
+              <p><strong>Hash:</strong> ${fingerprint}</p>
+              <p><em>Using only basic, canvas, and webGL methods</em></p>
+            `;
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

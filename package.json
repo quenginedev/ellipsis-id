@@ -1,0 +1,58 @@
+{
+  "name": "ellipsis-id",
+  "version": "1.0.0",
+  "description": "A comprehensive TypeScript library for generating stable browser fingerprints",
+  "main": "dist/index.js",
+  "type": "module",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "build:umd": "rollup -c",
+    "build:all": "npm run build && npm run build:umd",
+    "dev": "npx --yes http-server . --port 8080",
+    "test": "jest",
+    "prepublishOnly": "npm run build:all"
+  },
+  "keywords": [
+    "browser",
+    "fingerprint",
+    "fingerprinting",
+    "security",
+    "identification",
+    "canvas",
+    "webgl",
+    "audio",
+    "fonts",
+    "browser-detection"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@types/crypto-js": "^4.1.1",
+    "@types/node": "^22.14.0",
+    "rollup": "^4.39.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1",
+    "tslib": "^2.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/ellipsis-id.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/ellipsis-id/issues"
+  },
+  "homepage": "https://github.com/username/ellipsis-id#readme"
+}

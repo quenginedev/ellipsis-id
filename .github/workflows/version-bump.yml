@@ -1,0 +1,35 @@
+name: Version Bump
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Bump version
+        run: |
+          npm version patch -m "Bump version to %s [skip ci]"
+
+      - name: Push to prod
+        run: |
+          git checkout -b prod
+          git merge master
+          git push origin prod --force
