@@ -11,8 +11,20 @@ import { getNavigator, getScreen } from "../utils/browser-compat";
  * @returns Basic browser information component data
  */
 export async function getBasicFingerprint(): Promise<ComponentData> {
-  const nav = getNavigator();
-  const screen = getScreen();
+  let nav = {} as Record<string, any>;
+  let screen = {} as Record<string, any>;
+
+  try {
+    nav = getNavigator();
+  } catch (error) {
+    nav = {};
+  }
+
+  try {
+    screen = getScreen();
+  } catch (error) {
+    screen = {};
+  }
 
   // Collect basic browser information
   const data = {
