@@ -1,9 +1,7 @@
 name: NPM Publish
 
 on:
-  push:
-    branches:
-      - prod
+  workflow_dispatch:
 
 jobs:
   publish:
